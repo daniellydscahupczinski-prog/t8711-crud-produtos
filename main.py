@@ -19,7 +19,7 @@ from app.controllers.cidade_controller import Cidade_Controller
 
 # Componentes de Fornecedores
 from app.dao.fornecedor_dao import Fornecedor_DAO
-from app.views.fornecedor_view import Fornecedor_Terminal_View
+from app.views.fornecedor_view import Fornecedor_View
 from app.controllers.fornecedor_controller import Fornecedor_Controller
 
 # Componentes de Usuários
@@ -32,7 +32,7 @@ from app.dao.cliente_dao import Cliente_DAO
 from app.views.cliente_view import Cliente_Terminal_View
 from app.controllers.cliente_controller import Cliente_Controller
 
-
+import tkinter as tk
 class ErpApplication:
 
     def __init__(self):
@@ -79,8 +79,10 @@ class ErpApplication:
 
         self._ctrl_fornecedores = Fornecedor_Controller(
             dao=self._dao_fornecedores,
-            view=Fornecedor_Terminal_View()
+            view=None
         )
+
+
 
         # ===========================
         # PRODUTOS
@@ -96,6 +98,7 @@ class ErpApplication:
             fornecedor_dao=self._dao_fornecedores,
             view=Produto_Terminal_View()
         )
+
 
         # ===========================
         # USUÁRIOS
@@ -149,7 +152,8 @@ class ErpApplication:
             return -1
 
     def run(self):
-
+        
+          
         while True:
 
             opcao = self._renderizar_menu_principal()
@@ -164,8 +168,14 @@ class ErpApplication:
                 self._ctrl_produtos.inicializar_sistema()
 
             elif opcao == 2:
-
-                self._ctrl_fornecedores.inicializar_sistema()
+                janela_fornecedores = tk.Tk()
+                self._ctrl_fornecedores.view = Fornecedor_View(
+                    janela_fornecedores,
+                    self._ctrl_fornecedores
+                )                
+                self._ctrl_fornecedores.get_all()
+                self._ctrl_fornecedores.view.iniciar()
+                
 
             elif opcao == 3:
 
@@ -191,7 +201,7 @@ class ErpApplication:
                     Fore.WHITE +
                     "Pressione Enter para continuar..."
                 )
-
+    
 
 if __name__ == "__main__":
 
