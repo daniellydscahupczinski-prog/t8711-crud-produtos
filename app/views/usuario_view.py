@@ -1,187 +1,181 @@
-from colorama import init, Fore, Style
-from app.core.data_utils import Data_Utils
+from app.models.cidade import Cidade
 
-init(autoreset=True)
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import ttk
 
 
-class Usuario_Terminal_View:
+class Usuario_View:
+    def __init__(self, root, controller):
+        self.root = root
+        self.controller = controller
+        self.cidade = []
+        self.configurar_janela()
+        self.criar_componentes()
+        self.configurar_treeview()
+        self.configurar_eventos()
 
-    def __init__(self):
-        self.titulo_sistema = "=== CRUD DE USUÁRIOS (MVC) ==="
+    def configurar_janela(self):
+        self.root.title("CRUD de Usuarios")
+        self.root.geometry("800x600")
+        self.root.resizable(False, False)
 
-    def renderizar_menu(self):
-
-        print(Fore.CYAN + Style.BRIGHT + self.titulo_sistema)
-        print("1 - Cadastrar usuário")
-        print("2 - Listar usuários")
-        print("3 - Atualizar usuário")
-        print("4 - Excluir usuário")
-        print("0 - Sair")
-        print(Fore.CYAN + "=" * 60)
-
-        try:
-            return int(input("Escolha uma opção: "))
-        except ValueError:
-            return -1
-
-    def ler_campo(self, rotulo, valor_atual=None):
-
-        if valor_atual is not None:
-            prompt = f"{rotulo} [{Fore.GREEN}{valor_atual}{Style.RESET_ALL}]: "
-        else:
-            prompt = f"{rotulo}: "
-
-        valor = input(prompt)
-
-        if valor == "" and valor_atual is not None:
-            return valor_atual
-
-        return valor
-
-    def ler_dados_usuario(self, usuario_existente=None):
-
-        print(Fore.CYAN + Style.BRIGHT + "=== CADASTRO DE USUÁRIO ===")
-
-        nome = self.ler_campo(
-            "Nome",
-            usuario_existente.nome if usuario_existente else None
+    def criar_componentes(self):
+        self.lbl_titulo = tk.Label(
+            self.root,
+            text = "Cadastro de Usuario",
+            font = ("Arial", 16, "bold"),
+        )
+        self.lbl_titulo.grid(
+            row = 0,
+            column = 0,
+            columnspan = 4,
+            padx = 5,
+            pady = 5
+        )
+        self.frm_dados = tk.LabelFrame(
+            self.root,
+            text = "Dados do usuario"
+        )
+        self.frm_dados.grid(
+            row = 1,
+            column = 0,
+            columnspan = 4,
+            padx = 10,
+            pady = 5,
+            sticky = "ew"
+        )
+        self.lbl_id = tk.Label(
+            self.frm_dados,
+            text = "ID:"
+        )
+        self.lbl_id.grid(
+            row = 0,
+            column = 0,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.txt_id = tk.Entry(
+            self.frm_dados,
+            width = 10,
+            state = "readonly"
+        )
+        self.txt_id.grid(
+            row = 0,
+            column = 1,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.lbl_nome = tk.Label(
+            self.frm_dados,
+            text = "Nome:"
+        )
+        self.lbl_nome.grid(
+            row = 1,
+            column = 0,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.txt_nome = tk.Entry(
+            self.frm_dados,
+            width = 40
+        )
+        self.txt_nome.grid(
+            row = 1,
+            column = 1,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.cmb_cidade = ttk.Combobox(
+            self.frm_dados,
+            width = 37,
+            state = "readonly"
+        )
+        self.cmb_cidade.grid(
+            row = 1,
+            column = 3,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.lbl_email = tk.Label(
+            self.frm_dados,
+            text = "Estoque:"
+        )
+        self.lbl_email.grid(
+            row = 2,
+            column = 0,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.txt_email = tk.Entry(
+            self.frm_dados,
+            width = 20
+        )
+        self.txt_email.grid(
+            row = 2,
+            column = 1,
+            padx = 5,
+            sticky = "w"
+        )
+        self.lbl_data_nascimento = tk.Label(
+            self.frm_dados,
+            text = "Data nascimento:"
+        )
+        self.lbl_data_nascimento.grid(
+            row = 2,
+            column = 2,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.txt_data_nascimento = tk.Entry(
+            self.frm_dados,
+            width = 20
+        )
+        self.txt_data_nascimento.grid(
+            row = 2,
+            column = 3,
+            padx = 5,
+            stcky = "w"
+        )
+        self.frm_botoes = tk.Frame(
+            self.frm_dados,
+            border = 2,
+            relief = "groove"
+        )
+        self.frm_botoes.grid(
+            row = 4,
+            column = 0,
+            padx = 10,
+            pady  = 5,
+            columnspan = 4,
+        )
+        self.btn_novo = tk.Button(
+            self.frm_botoes,
+            text = "Novo",
+            width = 15
+        )
+        self.btn_novo.grid(
+            row = 0,
+            column = 0,
+            padx = 5,
+            pady = 5
+        )
+        self.btn_salvar = tk.Button(
+            self.frm_botoes,
+            text = "Salvar",
+            width = 15
+        )
+        self.btn_salvar.grid(
+            row = 0,
+            column = 1,
+            padx = 5,
+            pady = 5
         )
 
-        email = self.ler_campo(
-            "Email",
-            usuario_existente.email if usuario_existente else None
-        )
-
-        data_nascimento = self.ler_campo(
-            "Data de nascimento",
-            Data_Utils.data_para_string(
-                usuario_existente.data_nascimento
-            ) if usuario_existente else None
-        )
-
-        return nome, email, data_nascimento
-
-    def exibir_estados(self, estados):
-
-        print(Fore.YELLOW + "\n--- ESTADOS DISPONÍVEIS ---")
-
-        print(
-            f"{'ID':<4} | "
-            f"{'UF':<4} | "
-            f"{'ESTADO':<30}"
-        )
-
-        print("-" * 45)
-
-        for estado in estados:
-
-            print(
-                f"{estado.id:<4} | "
-                f"{estado.sigla:<4} | "
-                f"{estado.nome:<30}"
-            )
-
-        print("-" * 45)
-
-    def ler_estado(self, estado_atual=None):
-
-        if estado_atual is None:
-
-            return input("Informe o ID do estado: ")
-
-        valor = input(
-            f"Estado [{Fore.GREEN}{estado_atual}{Style.RESET_ALL}]: "
-        )
-
-        if valor == "":
-            return estado_atual
-
-        return valor
-
-    def exibir_cidades(self, cidades):
-
-        print(Fore.YELLOW + "\n--- CIDADES DISPONÍVEIS ---")
-
-        print(
-            f"{'ID':<4} | "
-            f"{'CIDADE':<30} | "
-            f"{'UF':<3}"
-        )
-
-        print("-" * 45)
-
-        for cidade in cidades:
-
-            print(
-                f"{cidade.id:<4} | "
-                f"{cidade.nome:<30} | "
-                f"{cidade.estado.sigla:<3}"
-            )
-
-        print("-" * 45)
-
-    def ler_cidade(self, cidade_atual=None):
-
-        if cidade_atual is None:
-
-            return input("Informe o ID da cidade: ")
-
-        valor = input(
-            f"Cidade [{Fore.GREEN}{cidade_atual}{Style.RESET_ALL}]: "
-        )
-
-        if valor == "":
-            return cidade_atual
-
-        return valor
-
-    def ler_id(self):
-
-        return input("Digite o ID do usuário: ")
-
-    def exibir_usuarios(self, usuarios):
-
-        print(Fore.YELLOW + "\n--- TABELA DE USUÁRIOS ---")
-
-        if not usuarios:
-
-            print("Nenhum usuário cadastrado.")
-            return
-
-        print(
-            f"{'ID':<4} | "
-            f"{'NOME':<20} | "
-            f"{'EMAIL':<30} | "
-            f"{'NASCIMENTO':<12} | "
-            f"{'IDADE':<5} | "
-            f"{'CIDADE':<25} | "
-            f"{'UF':<3}"
-        )
-
-        print("-" * 120)
-
-        for usuario in usuarios:
-
-            print(
-                f"{usuario.id:<4} | "
-                f"{usuario.nome:<20} | "
-                f"{usuario.email:<30} | "
-                f"{Data_Utils.data_para_string(usuario.data_nascimento):<12} | "
-                f"{usuario.idade:<5} | "
-                f"{usuario.cidade.nome:<25} | "
-                f"{usuario.cidade.estado.sigla:<3}"
-            )
-
-        print("-" * 120)
-
-    def exibir_mensagem(self, mensagem, sucesso=True):
-
-        cor = Fore.GREEN if sucesso else Fore.RED
-
-        print(cor + f"\n[STATUS] {mensagem}\n")
-
-        self.aguardar_entrada()
-
-    def aguardar_entrada(self):
-
-        input(Fore.WHITE + "Pressione Enter para continuar...")

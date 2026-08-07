@@ -19,7 +19,7 @@ class Estado_View:
 
     def configurar_janela(self):
         self.root.title("CRUD de Estados")
-        self.root.geometry("500x500")
+        self.root.geometry("800x600")
         self.root.resizable(False, False)
 
 
@@ -48,6 +48,8 @@ class Estado_View:
             pady = 5,
             sticky = "ew"
         )
+        self.frm_dados.grid_columnconfigure(0, weight=0)
+        self.frm_dados.grid_columnconfigure(1, weight=1)
         self.lbl_id = tk.Label(
             self.frm_dados,
             text = "ID:"
@@ -208,7 +210,8 @@ class Estado_View:
         )
         self.tbl_estados.column(
             "id",
-            width = 10
+            width = 10,
+            anchor = "center"
         )
         self.tbl_estados.column(
             "nome",
