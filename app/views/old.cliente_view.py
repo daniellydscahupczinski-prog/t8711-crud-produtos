@@ -4,18 +4,18 @@ from app.core.data_utils import Data_Utils
 init(autoreset=True)
 
 
-class Usuario_Terminal_View:
+class Cliente_Terminal_View:
 
     def __init__(self):
-        self.titulo_sistema = "=== CRUD DE USUÁRIOS (MVC) ==="
+        self.titulo_sistema = "=== CRUD DE CLIENTES (MVC) ==="
 
     def renderizar_menu(self):
 
         print(Fore.CYAN + Style.BRIGHT + self.titulo_sistema)
-        print("1 - Cadastrar usuário")
-        print("2 - Listar usuários")
-        print("3 - Atualizar usuário")
-        print("4 - Excluir usuário")
+        print("1 - Cadastrar cliente")
+        print("2 - Listar clientes")
+        print("3 - Atualizar cliente")
+        print("4 - Excluir cliente")
         print("0 - Sair")
         print(Fore.CYAN + "=" * 60)
 
@@ -38,28 +38,31 @@ class Usuario_Terminal_View:
 
         return valor
 
-    def ler_dados_usuario(self, usuario_existente=None):
+    def ler_dados_cliente(self, cliente_existente=None):
 
-        print(Fore.CYAN + Style.BRIGHT + "=== CADASTRO DE USUÁRIO ===")
+        print(Fore.CYAN + Style.BRIGHT + "=== CADASTRO DE CLIENTE ===")
 
         nome = self.ler_campo(
-            "Nome",
-            usuario_existente.nome if usuario_existente else None
-        )
-
-        email = self.ler_campo(
-            "Email",
-            usuario_existente.email if usuario_existente else None
+            "Nome do cliente",
+            cliente_existente.nome if cliente_existente else None
         )
 
         data_nascimento = self.ler_campo(
             "Data de nascimento",
             Data_Utils.data_para_string(
-                usuario_existente.data_nascimento
-            ) if usuario_existente else None
+                cliente_existente.data_nascimento
+            ) if cliente_existente else None
         )
 
-        return nome, email, data_nascimento
+        limite_credito = float(
+            self.ler_campo(
+                "Limite de crédito",
+                str(cliente_existente.limite_credito)
+                if cliente_existente else None
+            )
+        )
+
+        return nome, data_nascimento, limite_credito
 
     def exibir_estados(self, estados):
 
@@ -137,42 +140,42 @@ class Usuario_Terminal_View:
 
     def ler_id(self):
 
-        return input("Digite o ID do usuário: ")
+        return input("Digite o ID do cliente: ")
 
-    def exibir_usuarios(self, usuarios):
+    def exibir_clientes(self, clientes):
 
-        print(Fore.YELLOW + "\n--- TABELA DE USUÁRIOS ---")
+        print(Fore.YELLOW + "\n--- TABELA DE CLIENTES ---")
 
-        if not usuarios:
+        if not clientes:
 
-            print("Nenhum usuário cadastrado.")
+            print("Nenhum cliente cadastrado.")
             return
 
         print(
             f"{'ID':<4} | "
             f"{'NOME':<20} | "
-            f"{'EMAIL':<30} | "
             f"{'NASCIMENTO':<12} | "
             f"{'IDADE':<5} | "
+            f"{'LIMITE':<12} | "
             f"{'CIDADE':<25} | "
             f"{'UF':<3}"
         )
 
-        print("-" * 120)
+        print("-" * 105)
 
-        for usuario in usuarios:
+        for cliente in clientes:
 
             print(
-                f"{usuario.id:<4} | "
-                f"{usuario.nome:<20} | "
-                f"{usuario.email:<30} | "
-                f"{Data_Utils.data_para_string(usuario.data_nascimento):<12} | "
-                f"{usuario.idade:<5} | "
-                f"{usuario.cidade.nome:<25} | "
-                f"{usuario.cidade.estado.sigla:<3}"
+                f"{cliente.id:<4} | "
+                f"{cliente.nome:<20} | "
+                f"{Data_Utils.data_para_string(cliente.data_nascimento):<12} | "
+                f"{cliente.idade:<5} | "
+                f"{cliente.limite_credito:<12.2f} | "
+                f"{cliente.cidade.nome:<25} | "
+                f"{cliente.cidade.estado.sigla:<3}"
             )
 
-        print("-" * 120)
+        print("-" * 105)
 
     def exibir_mensagem(self, mensagem, sucesso=True):
 
