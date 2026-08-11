@@ -1,38 +1,13 @@
-<<<<<<< HEAD
-from app.models.cidade import Cidade
-=======
 
 
 from app.models.usuario import Usuario
 from app.core.data_utils import Data_Utils
->>>>>>> upstream/main
 
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
 
-<<<<<<< HEAD
-class Usuario_View:
-    def __init__(self, root, controller):
-        self.root = root
-        self.controller = controller
-        self.cidade = []
-        self.configurar_janela()
-        self.criar_componentes()
-        self.configurar_treeview()
-        self.configurar_eventos()
-
-    def configurar_janela(self):
-        self.root.title("CRUD de Usuarios")
-        self.root.geometry("800x600")
-        self.root.resizable(False, False)
-
-    def criar_componentes(self):
-        self.lbl_titulo = tk.Label(
-            self.root,
-            text = "Cadastro de Usuario",
-=======
 
 class Usuario_View:
     def __init__(self, root, controller):
@@ -55,7 +30,6 @@ class Usuario_View:
         self.lbl_titulo = tk.Label(
             self.root,
             text = "Cadastro de Usuários",
->>>>>>> upstream/main
             font = ("Arial", 16, "bold"),
         )
         self.lbl_titulo.grid(
@@ -67,31 +41,20 @@ class Usuario_View:
         )
         self.frm_dados = tk.LabelFrame(
             self.root,
-<<<<<<< HEAD
-            text = "Dados do usuario"
-=======
             text = "Dados do usuário"
->>>>>>> upstream/main
         )
         self.frm_dados.grid(
             row = 1,
             column = 0,
-<<<<<<< HEAD
-            columnspan = 4,
-=======
             columnspan=4,
->>>>>>> upstream/main
             padx = 10,
             pady = 5,
             sticky = "ew"
         )
-<<<<<<< HEAD
-=======
         self.frm_dados.grid_columnconfigure(0, weight=0)
         self.frm_dados.grid_columnconfigure(1, weight=1)
         self.frm_dados.grid_columnconfigure(2, weight=0)
         self.frm_dados.grid_columnconfigure(3, weight=1)
->>>>>>> upstream/main
         self.lbl_id = tk.Label(
             self.frm_dados,
             text = "ID:"
@@ -110,11 +73,7 @@ class Usuario_View:
         )
         self.txt_id.grid(
             row = 0,
-<<<<<<< HEAD
-            column = 1,
-=======
             column= 1,
->>>>>>> upstream/main
             padx = 5,
             pady = 5,
             sticky = "w"
@@ -141,27 +100,6 @@ class Usuario_View:
             pady = 5,
             sticky = "w"
         )
-<<<<<<< HEAD
-        self.cmb_cidade = ttk.Combobox(
-            self.frm_dados,
-            width = 37,
-            state = "readonly"
-        )
-        self.cmb_cidade.grid(
-            row = 1,
-            column = 3,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
-        self.lbl_email = tk.Label(
-            self.frm_dados,
-            text = "Estoque:"
-        )
-        self.lbl_email.grid(
-            row = 2,
-            column = 0,
-=======
         self.lbl_email = tk.Label(
             self.frm_dados,
             text = "Email:"
@@ -169,21 +107,12 @@ class Usuario_View:
         self.lbl_email.grid(
             row = 1,
             column = 2,
->>>>>>> upstream/main
             padx = 5,
             pady = 5,
             sticky = "w"
         )
         self.txt_email = tk.Entry(
             self.frm_dados,
-<<<<<<< HEAD
-            width = 20
-        )
-        self.txt_email.grid(
-            row = 2,
-            column = 1,
-            padx = 5,
-=======
             width = 40
         )
         self.txt_email.grid(
@@ -191,24 +120,15 @@ class Usuario_View:
             column = 3,
             padx = 5,
             pady = 5,
->>>>>>> upstream/main
             sticky = "w"
         )
         self.lbl_data_nascimento = tk.Label(
             self.frm_dados,
-<<<<<<< HEAD
-            text = "Data nascimento:"
-        )
-        self.lbl_data_nascimento.grid(
-            row = 2,
-            column = 2,
-=======
             text = "Nascimento (DD/MM/AAAA):"
         )
         self.lbl_data_nascimento.grid(
             row = 2,
             column = 0,
->>>>>>> upstream/main
             padx = 5,
             pady = 5,
             sticky = "w"
@@ -219,11 +139,6 @@ class Usuario_View:
         )
         self.txt_data_nascimento.grid(
             row = 2,
-<<<<<<< HEAD
-            column = 3,
-            padx = 5,
-            stcky = "w"
-=======
             column = 1,
             padx = 5,
             pady = 5,
@@ -274,7 +189,6 @@ class Usuario_View:
             padx = 5,
             pady = 5,
             sticky = "w"
->>>>>>> upstream/main
         )
         self.frm_botoes = tk.Frame(
             self.frm_dados,
@@ -285,11 +199,7 @@ class Usuario_View:
             row = 4,
             column = 0,
             padx = 10,
-<<<<<<< HEAD
-            pady  = 5,
-=======
             pady = 5,
->>>>>>> upstream/main
             columnspan = 4,
         )
         self.btn_novo = tk.Button(
@@ -313,10 +223,6 @@ class Usuario_View:
             column = 1,
             padx = 5,
             pady = 5
-<<<<<<< HEAD
-        )
-
-=======
         )
         self.btn_alterar = tk.Button(
             self.frm_botoes,
@@ -608,4 +514,3 @@ class Usuario_View:
     def iniciar(self):
         self.controller.carregar_estados()
         self.controller.get_all()
->>>>>>> upstream/main

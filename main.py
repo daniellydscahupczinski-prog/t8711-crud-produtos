@@ -171,22 +171,22 @@ class ErpApplication:
 
     def _configurar_janela(self):
         self._root.title("Sistema Corporativo ERP")
-        self._root.state("zoomed")
+        self._root.state("zoomed") #A janela abre maximizada
 
     def _criar_menu(self):
 
-        menu_principal = tk.Menu(self._root)
+        menu_principal = tk.Menu(self._root) # Menu é "filho" da janela principal
 
-        menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0)
+        menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0) # tem como filho  do menu principal
         menu_cadastros_basicos.add_command(
             label="Estados",
-            command=self._abrir_estados
+            command=self._abrir_estados #qual o metodo vai chamar quando clicar em estados
         )
         menu_cadastros_basicos.add_command(
             label="Cidades",
             command=self._abrir_cidades
         )
-        menu_principal.add_cascade(
+        menu_principal.add_cascade( # Aqui voce faz aparecer o "filho" do menu principal
             label="Cadastros básicos",
             menu=menu_cadastros_basicos
         )
