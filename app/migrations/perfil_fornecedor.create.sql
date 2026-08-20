@@ -8,4 +8,8 @@ create table perfil_fornecedor
 	constraint fk_fornecedor_perfil_fornecedor
 		foreign key(id_fornecedor)
 		references fornecedor(id)
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> upstream/main

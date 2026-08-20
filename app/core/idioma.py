@@ -21,7 +21,10 @@ class Idioma:
             "estado.janela_titulo": "CRUD de Estados",
             "estado.titulo": "Cadastro de Estados",
             "estado.dados_frame": "Dados do estado",
+<<<<<<< HEAD
             "estado.nome": "Nome:",
+=======
+>>>>>>> upstream/main
             "estado.sigla": "Sigla",
             "estado.confirmar_exclusao": "Deseja realmente excluir este estado?",
             "estado.cadastrado_sucesso": "Estado cadastrado com sucesso!",
@@ -32,6 +35,7 @@ class Idioma:
             "estado.erro_ao_excluir": "Problemas ao excluir estado",
             "estado.erro_sigla_tamanho": "A sigla deve possuir exatamente 2 caracteres.",
 
+<<<<<<< HEAD
             # Tela de Cidades
             "cidade.janela_titulo": "CRUD de Cidades",
             "cidade.titulo": "Cadastro de Cidades",
@@ -176,6 +180,8 @@ class Idioma:
 
 
 
+=======
+>>>>>>> upstream/main
             # Menu principal
             "menu.cadastros_basicos": "Cadastros básicos",
             "menu.estados": "Estados",
@@ -209,7 +215,10 @@ class Idioma:
             "estado.janela_titulo": "State Management",
             "estado.titulo": "State Registration",
             "estado.dados_frame": "State data",
+<<<<<<< HEAD
             "estado.nome": "Name:",
+=======
+>>>>>>> upstream/main
             "estado.sigla": "Abbreviation",
             "estado.confirmar_exclusao": "Do you really want to delete this state?",
             "estado.cadastrado_sucesso": "State registered successfully!",
@@ -220,6 +229,7 @@ class Idioma:
             "estado.erro_ao_excluir": "Problem deleting state",
             "estado.erro_sigla_tamanho": "The abbreviation must have exactly 2 characters.",
 
+<<<<<<< HEAD
             # Cities screen
             "cidade.janela_titulo": "City management",
             "cidade.titulo": "City registration",
@@ -356,6 +366,8 @@ class Idioma:
             "categoria.nao_encontrada": "Category not found.",
             "categoria.problema_excluir": "Problem deleting category",
 
+=======
+>>>>>>> upstream/main
             # Main menu
             "menu.cadastros_basicos": "Basic registrations",
             "menu.estados": "States",
@@ -377,9 +389,14 @@ class Idioma:
     def definir(cls, codigo):
         cls.ATUAL = codigo
 
+<<<<<<< HEAD
     @classmethod #usa quando voce tem algum atributo
     #dentro da classe e quer modificar ou acessar esses atributos
 
     def t(cls, chave): #cls e como se fosse um self porem ele aponta pra classe
         #em vez do objeto
+=======
+    @classmethod
+    def t(cls, chave):
+>>>>>>> upstream/main
         return cls.TEXTOS[cls.ATUAL].get(chave, chave)

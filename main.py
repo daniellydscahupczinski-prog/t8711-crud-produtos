@@ -36,6 +36,12 @@ from app.dao.fornecedor_categoria_dao import Fornecedor_Categoria_DAO
 from app.views.fornecedor_view import Fornecedor_View
 from app.controllers.fornecedor_controller import Fornecedor_Controller
 
+# Componentes de Perfis
+from app.dao.perfil_dao import Perfil_DAO
+from app.dao.perfil_fornecedor_dao import Perfil_Fornecedor_DAO
+from app.views.perfil_view import Perfil_View
+from app.controllers.perfil_controller import Perfil_Controller
+
 # Componentes de Usuários
 from app.dao.usuario_dao import Usuario_DAO
 from app.views.usuario_view import Usuario_View
@@ -45,6 +51,10 @@ from app.controllers.usuario_controller import Usuario_Controller
 from app.dao.cliente_dao import Cliente_DAO
 from app.views.cliente_view import Cliente_View
 from app.controllers.cliente_controller import Cliente_Controller
+
+# Componentes de Login
+from app.views.login_view import Login_View
+from app.controllers.login_controller import Login_Controller
 
 import tkinter as tk
 
@@ -59,17 +69,18 @@ class ErpApplication:
 
         self._root = tk.Tk()
 
+        self._usuario_logado = None
+
         self._janela_estados = None
         self._janela_cidades = None
         self._janela_fornecedores = None
         self._janela_produtos = None
         self._janela_categorias = None
+        self._janela_perfis = None
         self._janela_usuarios = None
         self._janela_clientes = None
         self._janela_perfis = None
         self._janela_perfil_fornecedor = None
-
-        self._configurar_janela()
 
         # ===========================
         # ESTADOS
@@ -113,6 +124,36 @@ class ErpApplication:
         )
 
         # ===========================
+        # PERFIS (DAO)
+        # ===========================
+        # Só o DAO nasce aqui: Usuario_DAO e Fornecedor_Controller
+        # precisam dele antes de existir um fornecedor_dao para o
+        # Perfil_Controller usar. O Perfil_Controller é montado mais
+        # abaixo, depois que FORNECEDORES já existe.
+
+        self._dao_perfis = Perfil_DAO(
+            self._database
+        )
+
+        # ===========================
+        # USUÁRIOS
+        # ===========================
+
+        self._dao_usuarios = Usuario_DAO(
+            self._database,
+            self._dao_cidades,
+            self._dao_perfis
+        )
+
+        self._ctrl_usuarios = Usuario_Controller(
+            dao=self._dao_usuarios,
+            cidade_dao=self._dao_cidades,
+            estado_dao=self._dao_estados,
+            perfil_dao=self._dao_perfis,
+            view=None
+        )
+
+        # ===========================
         # FORNECEDORES
         # ===========================
 
@@ -124,10 +165,16 @@ class ErpApplication:
             self._database
         )
 
+        self._dao_perfil_fornecedores = Perfil_Fornecedor_DAO(
+            self._database
+        )
+
         self._ctrl_fornecedores = Fornecedor_Controller(
             dao=self._dao_fornecedores,
             categoria_dao=self._dao_categorias,
             fornecedor_categoria_dao=self._dao_fornecedor_categorias,
+            perfil_fornecedor_dao=self._dao_perfil_fornecedores,
+            usuario_dao=self._dao_usuarios,
             view=None
         )
 
@@ -172,9 +219,10 @@ class ErpApplication:
         )
 
         # ===========================
-        # USUÁRIOS
+        # PERFIS (Controller)
         # ===========================
 
+<<<<<<< HEAD
         self._dao_usuarios = Usuario_DAO(
             self._database,
             self._dao_cidades,
@@ -186,6 +234,12 @@ class ErpApplication:
             cidade_dao=self._dao_cidades,
             estado_dao=self._dao_estados,
             perfis_dao=self._dao_perfis,
+=======
+        self._ctrl_perfis = Perfil_Controller(
+            dao=self._dao_perfis,
+            fornecedor_dao=self._dao_fornecedores,
+            perfil_fornecedor_dao=self._dao_perfil_fornecedores,
+>>>>>>> upstream/main
             view=None
         )
 
@@ -205,10 +259,31 @@ class ErpApplication:
             view=None
         )
 
+        self._iniciar_login()
+
+    def _iniciar_login(self):
+        ctrl_login = Login_Controller(
+            usuario_dao=self._dao_usuarios,
+            view=None,
+            ao_autenticar=self._on_login_sucesso
+        )
+        ctrl_login.view = Login_View(self._root, ctrl_login)
+
+    def _on_login_sucesso(self, usuario):
+        self._usuario_logado = usuario
+        self._ctrl_fornecedores.usuario_logado = usuario
+
+        for widget in self._root.winfo_children():
+            widget.destroy()
+
+        self._configurar_janela()
         self._criar_menu()
 
     def _configurar_janela(self):
-        self._root.title("Sistema Corporativo ERP")
+        titulo = "Sistema Corporativo ERP"
+        if self._usuario_logado is not None:
+            titulo = f"{titulo} — {self._usuario_logado.nome} ({self._usuario_logado.perfil.nome})"
+        self._root.title(titulo)
         self._root.state("zoomed")
 
     def _criar_menu(self):
@@ -266,6 +341,7 @@ class ErpApplication:
         )
 
         menu_idioma = tk.Menu(menu_principal, tearoff=0)
+<<<<<<< HEAD
 
         menu_idioma.add_command(
             label="🇧🇷 Português",
@@ -277,6 +353,16 @@ class ErpApplication:
             command=self._selecionar_ingles
         )
 
+=======
+        menu_idioma.add_command(
+            label="Português",
+            command=self._selecionar_portugues
+        )
+        menu_idioma.add_command(
+            label="English",
+            command=self._selecionar_ingles
+        )
+>>>>>>> upstream/main
         menu_principal.add_cascade(
             label=Idioma.t("menu.idioma"),
             menu=menu_idioma
@@ -294,6 +380,17 @@ class ErpApplication:
     def _mudar_idioma(self, codigo):
         Idioma.definir(codigo)
         self._criar_menu()
+<<<<<<< HEAD
+=======
+
+    def _selecionar_portugues(self):
+        self._mudar_idioma("pt")
+
+    def _selecionar_ingles(self):
+        self._mudar_idioma("en")
+
+    def _abrir_janela(self, atributo_janela, classe_view, controller):
+>>>>>>> upstream/main
 
     def _selecionar_portugues(self):
         self._mudar_idioma("pt")
@@ -404,6 +501,9 @@ class ErpApplication:
             Categoria_View,
             self._ctrl_categorias
         )
+
+    def _abrir_perfis(self):
+        self._abrir_janela("_janela_perfis", Perfil_View, self._ctrl_perfis)
 
     def _abrir_usuarios(self):
         self._abrir_janela(

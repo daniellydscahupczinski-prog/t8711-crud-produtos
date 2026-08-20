@@ -203,6 +203,7 @@ class Usuario_View:
             pady=5,
             sticky="w"
         )
+<<<<<<< HEAD
 
         self.lbl_perfis = tk.Label(
             self.frm_dados,
@@ -229,17 +230,73 @@ class Usuario_View:
             sticky="w"
         )
 
+=======
+        self.lbl_perfis = tk.Label(
+            self.frm_dados,
+            text = "Perfil:"
+        )
+        self.lbl_perfis.grid(
+            row = 3,
+            column = 2,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.cmb_perfis = ttk.Combobox(
+            self.frm_dados,
+            width = 37,
+            state = "readonly"
+        )
+        self.cmb_perfis.grid(
+            row = 3,
+            column = 3,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.lbl_senha = tk.Label(
+            self.frm_dados,
+            text = "Senha:"
+        )
+        self.lbl_senha.grid(
+            row = 4,
+            column = 0,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.txt_senha = tk.Entry(
+            self.frm_dados,
+            width = 20,
+            show = "*"
+        )
+        self.txt_senha.grid(
+            row = 4,
+            column = 1,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+>>>>>>> upstream/main
         self.frm_botoes = tk.Frame(
             self.frm_dados,
             border=2,
             relief="groove"
         )
         self.frm_botoes.grid(
+<<<<<<< HEAD
             row=4,
             column=0,
             padx=10,
             pady=5,
             columnspan=4,
+=======
+            row = 5,
+            column = 0,
+            padx = 10,
+            pady = 5,
+            columnspan = 4,
+>>>>>>> upstream/main
         )
 
         self.btn_novo = tk.Button(
@@ -324,7 +381,11 @@ class Usuario_View:
             "idade",
             "cidade",
             "estado",
+<<<<<<< HEAD
             "perfis"
+=======
+            "perfil"
+>>>>>>> upstream/main
         )
 
         self.tbl_usuarios.column(
@@ -371,6 +432,7 @@ class Usuario_View:
             width=15,
             anchor="center"
         )
+<<<<<<< HEAD
 
         self.tbl_usuarios.column(
             "perfis",
@@ -378,6 +440,12 @@ class Usuario_View:
             anchor="center"
         )
 
+=======
+        self.tbl_usuarios.column(
+            "perfil",
+            width = 30
+        )
+>>>>>>> upstream/main
         self.tbl_usuarios.heading(
             "id",
             text="ID"
@@ -412,12 +480,19 @@ class Usuario_View:
             "estado",
             text="UF"
         )
+<<<<<<< HEAD
 
         self.tbl_usuarios.heading(
             "perfis",
             text="Perfis"
         )
 
+=======
+        self.tbl_usuarios.heading(
+            "perfil",
+            text = "Perfil"
+        )
+>>>>>>> upstream/main
     def configurar_eventos(self):
         self.btn_novo.config(
             command=self.controller.new
@@ -476,12 +551,18 @@ class Usuario_View:
     def carregar_perfis(self, perfis):
         self._perfis = perfis
         valores = []
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/main
         for perfil in perfis:
             valores.append(
                 f"{perfil.id} - {perfil.nome}"
             )
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/main
         self.cmb_perfis["values"] = valores
         self.cmb_perfis.set("")
 
@@ -533,10 +614,17 @@ class Usuario_View:
                 self.cmb_cidades.current(indice)
                 break
 
+<<<<<<< HEAD
         if usuario.perfis:
             self.cmb_perfis.set(
                 f"{usuario.perfis.id} - {usuario.perfis.nome}"
             )
+=======
+        for indice, perfil in enumerate(self._perfis):
+            if perfil.id == usuario.perfil.id:
+                self.cmb_perfis.current(indice)
+                break
+>>>>>>> upstream/main
 
     def limpar_campos(self):
         self.txt_id.config(state="normal")
@@ -552,11 +640,16 @@ class Usuario_View:
         self.cmb_cidades.set("")
         self.cmb_cidades["values"] = []
         self._cidades = []
+<<<<<<< HEAD
 
         self.cmb_perfis.set("")
         self.cmb_perfis["values"] = []
         self._perfis = []
 
+=======
+        self.cmb_perfis.set("")
+        self.txt_senha.delete(0, tk.END)
+>>>>>>> upstream/main
         self.txt_nome.focus()
 
     def limpar_treeview(self):
@@ -583,6 +676,7 @@ class Usuario_View:
         data_nascimento = self.txt_data_nascimento.get()
 
         if not Data_Utils.validar_data(data_nascimento):
+<<<<<<< HEAD
             raise ValueError(
                 (Idioma.t("usuario.nascimento_invalido"))
             )
@@ -606,6 +700,19 @@ class Usuario_View:
         perfis = self._perfis[indice]
 
         return nome, email, data_nascimento, cidade, perfis
+=======
+            raise ValueError("Data de nascimento inválida. Use o formato DD/MM/AAAA.")
+        indice_cidade = self.cmb_cidades.current()
+        if indice_cidade < 0:
+            raise ValueError("Selecione uma cidade.")
+        cidade = self._cidades[indice_cidade]
+        indice_perfil = self.cmb_perfis.current()
+        if indice_perfil < 0:
+            raise ValueError("Selecione um perfil.")
+        perfil = self._perfis[indice_perfil]
+        senha = self.txt_senha.get()
+        return nome, email, data_nascimento, cidade, perfil, senha
+>>>>>>> upstream/main
 
     def exibir_mensagem(self, mensagem, sucesso=True):
         if sucesso:
@@ -640,7 +747,11 @@ class Usuario_View:
                     usuario.idade,
                     usuario.cidade.nome,
                     usuario.cidade.estado.sigla,
+<<<<<<< HEAD
                     usuario.perfis.nome
+=======
+                    usuario.perfil.nome
+>>>>>>> upstream/main
                 )
             )
 
@@ -649,4 +760,9 @@ class Usuario_View:
 
     def iniciar(self):
         self.controller.carregar_estados()
+<<<<<<< HEAD
         self.controller.get_all()
+=======
+        self.controller.carregar_perfis()
+        self.controller.get_all()
+>>>>>>> upstream/main

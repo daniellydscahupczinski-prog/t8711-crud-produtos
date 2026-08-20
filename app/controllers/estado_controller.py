@@ -1,5 +1,9 @@
 from app.models.estado import Estado
 from app.core.idioma import Idioma
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/main
 
 class Estado_Controller:
     def __init__(self, dao, view):
@@ -20,9 +24,13 @@ class Estado_Controller:
             )
             self.dao.save(estado)
             self.get_all()
+<<<<<<< HEAD
             self.view.exibir_mensagem((Idioma.t("estado.cadastrado_sucesso!")))
+=======
+            self.view.exibir_mensagem(Idioma.t("estado.cadastrado_sucesso"))
+>>>>>>> upstream/main
         except ValueError as e:
-            self.view.exibir_mensagem(f"Erro: {str(e)}", False)
+            self.view.exibir_mensagem(f"{Idioma.t('comum.erro_prefixo')}{Idioma.t(str(e))}", False)
 
     def get_all(self):
         estados = self.dao.get_all()
@@ -44,12 +52,17 @@ class Estado_Controller:
     def update(self):
         try:
             if self.estado_selecionado is None:
+<<<<<<< HEAD
                 self.view.exibir_mensagem((Idioma.t("estado.selecione_da_lista.", False)))
+=======
+                self.view.exibir_mensagem(Idioma.t("estado.selecione_da_lista"), False)
+>>>>>>> upstream/main
                 return
             nome, sigla = self.view.ler_dados_estado()
             self.estado_selecionado.atualizar_dados(nome, sigla)
             self.dao.update(self.estado_selecionado)
             self.get_all()
+<<<<<<< HEAD
             self.view.exibir_mensagem((Idioma.t("estado.atualizado_sucesso!")))
         except ValueError as e:
             self.view.exibir_mensagem((Idioma.t(f"comum.erro_prefixo", False)))
@@ -57,6 +70,15 @@ class Estado_Controller:
     def delete(self):
         if self.estado_selecionado is None:
             self.view.exibir_mensagem((Idioma.t("estado.selecione_da_lista.", False)))
+=======
+            self.view.exibir_mensagem(Idioma.t("estado.atualizado_sucesso"))
+        except ValueError as e:
+            self.view.exibir_mensagem(f"{Idioma.t('comum.erro_prefixo')}{Idioma.t(str(e))}", False)
+
+    def delete(self):
+        if self.estado_selecionado is None:
+            self.view.exibir_mensagem(Idioma.t("estado.selecione_da_lista"), False)
+>>>>>>> upstream/main
             return
         if not self.view.confirmar_exclusao():
             return
@@ -66,8 +88,16 @@ class Estado_Controller:
                 self.estado_selecionado = None
                 self.view.limpar_campos()
                 self.get_all()
+<<<<<<< HEAD
                 self.view.exibir_mensagem((Idioma.t("estado.excluido_sucesso")))
             else:
                 self.view.exibir_mensagem((Idioma.t("estado.nao_encontrado.", False)))
         except Exception as e:
             self.view.exibir_mensagem((Idioma.t("estado.erro_ao_excluir", False)))
+=======
+                self.view.exibir_mensagem(Idioma.t("estado.excluido_sucesso"))
+            else:
+                self.view.exibir_mensagem(Idioma.t("estado.nao_encontrado"), False)
+        except Exception as e:
+            self.view.exibir_mensagem(Idioma.t("estado.erro_ao_excluir"), False)
+>>>>>>> upstream/main

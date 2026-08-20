@@ -1,5 +1,9 @@
 from app.models.cidade import Cidade
+<<<<<<< HEAD
 from app.models.perfis import Perfis
+=======
+from app.models.perfil import Perfil
+>>>>>>> upstream/main
 from app.core.data_utils import Data_Utils
 
 
@@ -12,14 +16,24 @@ class Usuario:
         email,
         data_nascimento,
         cidade: Cidade,
+<<<<<<< HEAD
         perfis: Perfis
+=======
+        perfil: Perfil,
+        senha
+>>>>>>> upstream/main
     ):
         self._id = id
         self._nome = nome
         self._email = email
         self._data_nascimento = data_nascimento
         self._cidade = cidade
+<<<<<<< HEAD
         self.perfis = perfis
+=======
+        self._perfil = perfil
+        self._senha = senha
+>>>>>>> upstream/main
 
     @property
     def id(self):
@@ -62,12 +76,29 @@ class Usuario:
         self._cidade = nova_cidade
 
     @property
+<<<<<<< HEAD
     def perfis(self):
         return self._perfis
     
     @perfis.setter
     def perfis(self, novo_perfil):
         self._perfis = novo_perfil
+=======
+    def perfil(self):
+        return self._perfil
+
+    @perfil.setter
+    def perfil(self, novo_perfil):
+        self._perfil = novo_perfil
+
+    @property
+    def senha(self):
+        return self._senha
+
+    @senha.setter
+    def senha(self, nova_senha):
+        self._senha = nova_senha
+>>>>>>> upstream/main
 
     @property
     def idade(self):
@@ -80,10 +111,17 @@ class Usuario:
         nova_data_nascimento,
         nova_cidade,
         novo_perfil
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/main
     ):
         self._nome = novo_nome
         self._email = novo_email
         self._data_nascimento = nova_data_nascimento
         self._cidade = nova_cidade
+<<<<<<< HEAD
         self._perfis = novo_perfil
+=======
+        self._perfil = novo_perfil
+>>>>>>> upstream/main

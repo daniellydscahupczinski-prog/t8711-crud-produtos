@@ -1,7 +1,16 @@
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> upstream/main
 import tkinter as tk
 from tkinter import messagebox
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/main
 class Perfil_Fornecedor_View:
     def __init__(
         self,
@@ -26,6 +35,7 @@ class Perfil_Fornecedor_View:
     def criar_componentes(self):
         self.lbl_titulo = tk.Label(
             self.root,
+<<<<<<< HEAD
             text=f"Fornecedores do perfil {self.perfil.nome}",
             font=("Arial", 12, "bold"),
             wraplength=380
@@ -56,10 +66,40 @@ class Perfil_Fornecedor_View:
             expand=True
         )
 
+=======
+            text = f"Fornecedores do perfil {self.perfil.nome}",
+            font = ("Arial", 12, "bold"),
+            wraplength = 380
+        )
+        self.lbl_titulo.pack(
+            padx = 10,
+            pady = 10
+        )
+        self.lbl_instrucao = tk.Label(
+            self.root,
+            text = "Clique para marcar/desmarcar os fornecedores deste perfil:"
+        )
+        self.lbl_instrucao.pack(
+            padx = 10,
+            anchor = "w"
+        )
+        self.lst_fornecedores = tk.Listbox(
+            self.root,
+            selectmode = tk.MULTIPLE,
+            height = 15
+        )
+        self.lst_fornecedores.pack(
+            padx = 10,
+            pady = 10,
+            fill = "both",
+            expand = True
+        )
+>>>>>>> upstream/main
         self.frm_botoes = tk.Frame(
             self.root
         )
         self.frm_botoes.pack(
+<<<<<<< HEAD
             pady=10
         )
 
@@ -85,21 +125,53 @@ class Perfil_Fornecedor_View:
             row=0,
             column=1,
             padx=5
+=======
+            pady = 10
+        )
+        self.btn_salvar = tk.Button(
+            self.frm_botoes,
+            text = "Salvar",
+            width = 15,
+            command = self.salvar
+        )
+        self.btn_salvar.grid(
+            row = 0,
+            column = 0,
+            padx = 5
+        )
+        self.btn_cancelar = tk.Button(
+            self.frm_botoes,
+            text = "Cancelar",
+            width = 15,
+            command = self.fechar
+        )
+        self.btn_cancelar.grid(
+            row = 0,
+            column = 1,
+            padx = 5
+>>>>>>> upstream/main
         )
 
     def preencher_lista(self):
 
         ids_associados = []
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/main
         for fornecedor in self.perfil.fornecedores:
             ids_associados.append(fornecedor.id)
 
         for indice, fornecedor in enumerate(self._fornecedores):
+<<<<<<< HEAD
             self.lst_fornecedores.insert(
                 tk.END,
                 fornecedor.nome_fantasia
             )
 
+=======
+            self.lst_fornecedores.insert(tk.END, fornecedor.nome_fantasia)
+>>>>>>> upstream/main
             if fornecedor.id in ids_associados:
                 self.lst_fornecedores.selection_set(indice)
 
@@ -108,11 +180,16 @@ class Perfil_Fornecedor_View:
         indices_selecionados = self.lst_fornecedores.curselection()
 
         fornecedores_selecionados = []
+<<<<<<< HEAD
 
         for indice in indices_selecionados:
             fornecedores_selecionados.append(
                 self._fornecedores[indice]
             )
+=======
+        for indice in indices_selecionados:
+            fornecedores_selecionados.append(self._fornecedores[indice])
+>>>>>>> upstream/main
 
         self.controller.salvar_fornecedores(
             self,
@@ -135,4 +212,8 @@ class Perfil_Fornecedor_View:
             )
 
     def fechar(self):
+<<<<<<< HEAD
         self.root.destroy()
+=======
+        self.root.destroy()
+>>>>>>> upstream/main

@@ -1,5 +1,6 @@
 from app.models.usuario import Usuario
 from app.core.data_utils import Data_Utils
+<<<<<<< HEAD
 from app.core.idioma import Idioma
 
 class Usuario_Controller:
@@ -9,6 +10,18 @@ class Usuario_Controller:
         self.cidade_dao = cidade_dao
         self.estado_dao = estado_dao
         self.perfis_dao = perfis_dao
+=======
+from app.core.senha_utils import Senha_Utils
+
+
+class Usuario_Controller:
+
+    def __init__(self, dao, cidade_dao, estado_dao, perfil_dao, view):
+        self.dao = dao
+        self.cidade_dao = cidade_dao
+        self.estado_dao = estado_dao
+        self.perfil_dao = perfil_dao
+>>>>>>> upstream/main
         self.view = view
         self.usuario_selecionado = None
 
@@ -20,7 +33,11 @@ class Usuario_Controller:
         self.view.carregar_estados(estados)
 
     def carregar_perfis(self):
+<<<<<<< HEAD
         perfis = self.perfis_dao.get_all()
+=======
+        perfis = self.perfil_dao.get_all()
+>>>>>>> upstream/main
         self.view.carregar_perfis(perfis)
 
     def carregar_cidades_do_estado_selecionado(self, event):
@@ -35,14 +52,25 @@ class Usuario_Controller:
 
     def save(self):
         try:
+<<<<<<< HEAD
             nome, email, data_nascimento, cidade, perfis = self.view.ler_dados_usuario()
+=======
+            nome, email, data_nascimento, cidade, perfil, senha = self.view.ler_dados_usuario()
+            if not senha:
+                raise ValueError("Informe uma senha para o novo usuário.")
+>>>>>>> upstream/main
             usuario = Usuario(
                 None,
                 nome,
                 email,
                 Data_Utils.string_para_data(data_nascimento),
                 cidade,
+<<<<<<< HEAD
                 perfis
+=======
+                perfil,
+                Senha_Utils.gerar_hash(senha)
+>>>>>>> upstream/main
             )
             self.dao.save(usuario)
             self.get_all()
@@ -76,14 +104,24 @@ class Usuario_Controller:
             if self.usuario_selecionado is None:
                 self.view.exibir_mensagem((Idioma.t("usuario.selecione_usuario", False)))
                 return
+<<<<<<< HEAD
             nome, email, data_nascimento, cidade, perfis = self.view.ler_dados_usuario()
+=======
+            nome, email, data_nascimento, cidade, perfil, senha = self.view.ler_dados_usuario()
+>>>>>>> upstream/main
             self.usuario_selecionado.atualizar_dados(
                 nome,
                 email,
                 Data_Utils.string_para_data(data_nascimento),
                 cidade,
+<<<<<<< HEAD
                 perfis
+=======
+                perfil
+>>>>>>> upstream/main
             )
+            if senha:
+                self.usuario_selecionado.senha = Senha_Utils.gerar_hash(senha)
             self.dao.update(self.usuario_selecionado)
             self.get_all()
             self.view.exibir_mensagem((Idioma.t("usuario.atualizado")))

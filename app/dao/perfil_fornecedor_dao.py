@@ -94,4 +94,8 @@ class Perfil_Fornecedor_DAO:
             raise
 
         finally:
+<<<<<<< HEAD
             self._database.desconectar(cursor, conexao)
+=======
+            self._database.desconectar(cursor, conexao)
+>>>>>>> upstream/main
