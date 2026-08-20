@@ -1,10 +1,19 @@
 from colorama import init
 from app.core.database import Database
+from app.core.idioma import Idioma
 
 # Componentes de Produtos
 from app.dao.produto_dao import Produto_DAO
 from app.views.produto_view import Produto_View
 from app.controllers.produto_controller import Produto_Controller
+
+# Componentes de Perfis
+from app.dao.perfis_dao import Perfis_DAO
+from app.dao.perfil_fornecedor_dao import Perfil_Fornecedor_DAO
+from app.controllers.perfis_controller import Perfis_controller
+from app.controllers.perfil_fornecedor_controller import Perfil_Fornecedor_Controller
+from app.views.perfis_view import Perfil_View
+from app.views.perfil_fornecedor_view import Perfil_Fornecedor_View
 
 # Componentes de Categorias
 from app.dao.categoria_dao import Categoria_DAO
@@ -57,6 +66,8 @@ class ErpApplication:
         self._janela_categorias = None
         self._janela_usuarios = None
         self._janela_clientes = None
+        self._janela_perfis = None
+        self._janela_perfil_fornecedor = None
 
         self._configurar_janela()
 
@@ -67,6 +78,7 @@ class ErpApplication:
         self._dao_estados = Estado_DAO(
             self._database
         )
+
         self._ctrl_estados = Estado_Controller(
             dao=self._dao_estados,
             view=None
@@ -120,6 +132,31 @@ class ErpApplication:
         )
 
         # ===========================
+        # PERFIS
+        # ===========================
+
+        self._dao_perfis = Perfis_DAO(
+            self._database
+        )
+
+        self._dao_perfil_fornecedor = Perfil_Fornecedor_DAO(
+            self._database
+        )
+
+        self._ctrl_perfil_fornecedor = Perfil_Fornecedor_Controller(
+            dao=self._dao_perfil_fornecedor,
+            fornecedor_dao=self._dao_fornecedores,
+            view=None
+        )
+
+        self._ctrl_perfis = Perfis_controller(
+            dao=self._dao_perfis,
+            perfis_dao=self._dao_perfis,
+            perfil_fornecedor_controller=self._ctrl_perfil_fornecedor,
+            view=None
+        )
+
+        # ===========================
         # PRODUTOS
         # ===========================
 
@@ -134,20 +171,21 @@ class ErpApplication:
             view=None
         )
 
-
         # ===========================
         # USUÁRIOS
         # ===========================
 
         self._dao_usuarios = Usuario_DAO(
             self._database,
-            self._dao_cidades
+            self._dao_cidades,
+            self._dao_perfis
         )
 
         self._ctrl_usuarios = Usuario_Controller(
             dao=self._dao_usuarios,
             cidade_dao=self._dao_cidades,
             estado_dao=self._dao_estados,
+            perfis_dao=self._dao_perfis,
             view=None
         )
 
@@ -171,100 +209,215 @@ class ErpApplication:
 
     def _configurar_janela(self):
         self._root.title("Sistema Corporativo ERP")
-        self._root.state("zoomed") #A janela abre maximizada
+        self._root.state("zoomed")
 
     def _criar_menu(self):
 
-        menu_principal = tk.Menu(self._root) # Menu é "filho" da janela principal
+        menu_principal = tk.Menu(self._root)
 
-        menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0) # tem como filho  do menu principal
+        menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0)
         menu_cadastros_basicos.add_command(
-            label="Estados",
-            command=self._abrir_estados #qual o metodo vai chamar quando clicar em estados
+            label=Idioma.t("menu.estados"),
+            command=self._abrir_estados
         )
         menu_cadastros_basicos.add_command(
-            label="Cidades",
+            label=Idioma.t("menu.cidades"),
             command=self._abrir_cidades
         )
-        menu_principal.add_cascade( # Aqui voce faz aparecer o "filho" do menu principal
-            label="Cadastros básicos",
+        menu_principal.add_cascade(
+            label=Idioma.t("menu.cadastros_basicos"),
             menu=menu_cadastros_basicos
         )
 
         menu_acessos = tk.Menu(menu_principal, tearoff=0)
         menu_acessos.add_command(
-            label="Usuários",
+            label=Idioma.t("menu.usuarios"),
             command=self._abrir_usuarios
         )
+        menu_acessos.add_command(
+            label=Idioma.t("menu.perfis"),
+            command=self._abrir_perfis
+        )
         menu_principal.add_cascade(
-            label="Acessos",
+            label=Idioma.t("menu.acessos"),
             menu=menu_acessos
         )
 
         menu_gestao_estoque = tk.Menu(menu_principal, tearoff=0)
         menu_gestao_estoque.add_command(
-            label="Clientes",
+            label=Idioma.t("menu.clientes"),
             command=self._abrir_clientes
         )
         menu_gestao_estoque.add_command(
-            label="Fornecedores",
+            label=Idioma.t("menu.fornecedores"),
             command=self._abrir_fornecedores
         )
         menu_gestao_estoque.add_command(
-            label="Produtos",
+            label=Idioma.t("menu.produtos"),
             command=self._abrir_produtos
         )
         menu_gestao_estoque.add_command(
-            label="Categorias",
+            label=Idioma.t("menu.categorias"),
             command=self._abrir_categorias
         )
         menu_principal.add_cascade(
-            label="Gestão de estoque",
+            label=Idioma.t("menu.gestao_estoque"),
             menu=menu_gestao_estoque
         )
 
+        menu_idioma = tk.Menu(menu_principal, tearoff=0)
+
+        menu_idioma.add_command(
+            label="🇧🇷 Português",
+            command=self._selecionar_portugues
+        )
+
+        menu_idioma.add_command(
+            label="🇺🇸 English",
+            command=self._selecionar_ingles
+        )
+
+        menu_principal.add_cascade(
+            label=Idioma.t("menu.idioma"),
+            menu=menu_idioma
+        )
+
         menu_principal.add_command(
-            label="Sair",
+            label=Idioma.t("menu.sair"),
             command=self._root.destroy
         )
 
-        self._root.config(menu=menu_principal)
+        self._root.config(
+            menu=menu_principal
+        )
 
-    def _abrir_janela(self, atributo_janela, classe_view, controller):
+    def _mudar_idioma(self, codigo):
+        Idioma.definir(codigo)
+        self._criar_menu()
 
-        janela_existente = getattr(self, atributo_janela)
+    def _selecionar_portugues(self):
+        self._mudar_idioma("pt")
 
-        if janela_existente is not None and janela_existente.winfo_exists():
+    def _selecionar_ingles(self):
+        self._mudar_idioma("en")
+
+    def _abrir_janela(
+        self,
+        atributo_janela,
+        classe_view,
+        controller
+    ):
+
+        janela_existente = getattr(
+            self,
+            atributo_janela
+        )
+
+        if (
+            janela_existente is not None
+            and janela_existente.winfo_exists()
+        ):
             janela_existente.lift()
             janela_existente.focus_force()
             return
 
-        janela = tk.Toplevel(self._root)
-        setattr(self, atributo_janela, janela)
+        janela = tk.Toplevel(
+            self._root
+        )
 
-        controller.view = classe_view(janela, controller)
+        setattr(
+            self,
+            atributo_janela,
+            janela
+        )
+
+        controller.view = classe_view(
+            janela,
+            controller
+        )
+
         controller.view.iniciar()
 
+    def _abrir_perfil_fornecedor(
+        self,
+        perfil
+    ):
+
+        fornecedores = self._ctrl_perfil_fornecedor.abrir_fornecedores(
+            perfil
+        )
+
+        if not fornecedores:
+            fornecedores = self._dao_fornecedores.get_all()
+
+        janela = tk.Toplevel(
+            self._root
+        )
+
+        self._janela_perfil_fornecedor = janela
+
+        Perfil_Fornecedor_View(
+            janela,
+            self._ctrl_perfil_fornecedor,
+            perfil,
+            fornecedores
+        )
+
+    def _abrir_perfis(self):
+        self._abrir_janela(
+            "_janela_perfis",
+            Perfil_View,
+            self._ctrl_perfis
+        )
+
     def _abrir_estados(self):
-        self._abrir_janela("_janela_estados", Estado_View, self._ctrl_estados)
+        self._abrir_janela(
+            "_janela_estados",
+            Estado_View,
+            self._ctrl_estados
+        )
 
     def _abrir_cidades(self):
-        self._abrir_janela("_janela_cidades", Cidade_View, self._ctrl_cidades)
+        self._abrir_janela(
+            "_janela_cidades",
+            Cidade_View,
+            self._ctrl_cidades
+        )
 
     def _abrir_fornecedores(self):
-        self._abrir_janela("_janela_fornecedores", Fornecedor_View, self._ctrl_fornecedores)
+        self._abrir_janela(
+            "_janela_fornecedores",
+            Fornecedor_View,
+            self._ctrl_fornecedores
+        )
 
     def _abrir_produtos(self):
-        self._abrir_janela("_janela_produtos", Produto_View, self._ctrl_produtos)
+        self._abrir_janela(
+            "_janela_produtos",
+            Produto_View,
+            self._ctrl_produtos
+        )
 
     def _abrir_categorias(self):
-        self._abrir_janela("_janela_categorias", Categoria_View, self._ctrl_categorias)
+        self._abrir_janela(
+            "_janela_categorias",
+            Categoria_View,
+            self._ctrl_categorias
+        )
 
     def _abrir_usuarios(self):
-        self._abrir_janela("_janela_usuarios", Usuario_View, self._ctrl_usuarios)
+        self._abrir_janela(
+            "_janela_usuarios",
+            Usuario_View,
+            self._ctrl_usuarios
+        )
 
     def _abrir_clientes(self):
-        self._abrir_janela("_janela_clientes", Cliente_View, self._ctrl_clientes)
+        self._abrir_janela(
+            "_janela_clientes",
+            Cliente_View,
+            self._ctrl_clientes
+        )
 
     def run(self):
         self._root.mainloop()

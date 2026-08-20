@@ -4,7 +4,7 @@ class Data_Utils:
 
     FORMATO_DATA = "%d/%m/%Y"
 
-    @staticmethod
+    @staticmethod #metodo da classe, recebe dados e devolve dados
     def string_para_data(data):
         return datetime.strptime(data,Data_Utils.FORMATO_DATA).date()
     
@@ -21,7 +21,7 @@ class Data_Utils:
             return False
         
 
-    @staticmethod
+    @staticmethod 
     def calcular_idade(data):
         data_inicio = data
         if isinstance(data, str):

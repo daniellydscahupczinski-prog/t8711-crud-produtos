@@ -2,9 +2,9 @@ from app.dao.dao import DAO
 from app.models.perfis import Perfis
 
 class Perfis_DAO(DAO):
-    def __init__(self, database, usuario_dao):
+    def __init__(self, database):
         super().__init__(database)
-        self._usuario_dao = usuario_dao
+        
 
     def save(self,perfis):
         conexao, cursor = self.conectar()
@@ -34,8 +34,7 @@ class Perfis_DAO(DAO):
                         SELECT
                             ID,
                             NOME,
-                            DESCRICAO,
-                            USUARIO_ID
+                            DESCRICAO
                         FROM
                             PERFIS
                         ORDER BY
@@ -45,13 +44,12 @@ class Perfis_DAO(DAO):
             registros = cursor.fetchall()
             perfis = []
             for registro in registros:
-                usuario = self._usuario_dao.get_by_id(registro[3])
                 perfis.append(
                     Perfis(
                         registro[0],
                         registro[1],
-                        registro[2],
-                        usuario
+                        registro[2]
+                        
                     )
                 )
             return perfis
@@ -65,8 +63,7 @@ class Perfis_DAO(DAO):
                         SELECT
                             ID,
                             NOME,
-                            DESCRICAO,
-                            USUARIO_ID
+                            DESCRICAo
                         FROM
                             PERFIS
                         WHERE 
@@ -77,14 +74,10 @@ class Perfis_DAO(DAO):
 
             if registro is None:
                 return None
-
-            usuario = self._usuario_dao.get_by_id(registro[3])
-
             return Perfis(
                 registro[0],
                 registro[1],
-                registro[2],
-                usuario
+                registro[2]
             )
         finally:
             self.desconectar(cursor, conexao)
@@ -95,15 +88,13 @@ class Perfis_DAO(DAO):
             sql = """
                         UPDATE PRODUTO SET
                             NOME = %s,
-                            DESCRICAO = %s,
-                            USUARIO_ID = %s
+                            DESCRICAO = %s
                         WHERE
                             ID = %s
                             """
             cursor.execute(sql, (
                                         perfis.nome,
                                         perfis.descricao,
-                                        perfis.usuario.id,
                                         perfis.id
             ))
             conexao.commit()

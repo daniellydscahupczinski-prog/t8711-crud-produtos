@@ -1,4 +1,5 @@
 from app.models.fornecedor import Fornecedor
+from app.core.idioma import Idioma
 class Produto:
     def __init__(self, id, nome, estoque, preco, fornecedor:Fornecedor):
         self._id = id
@@ -54,9 +55,9 @@ class Produto:
 
     def atualizar_dados(self, novo_nome, novo_estoque, novo_preco, novo_fornecedor):
         if novo_preco < 0:
-            raise ValueError("O preço não pode ser negativo.")
+            raise ValueError((Idioma.t("produto.preco_negativo")))
         if novo_estoque < 0:
-            raise ValueError("O estoque não pode ser negativo.")
+            raise ValueError((Idioma.t("produto.estoque_negativo")))
         self._nome = novo_nome
         self._estoque = novo_estoque
         self._preco = novo_preco

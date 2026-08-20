@@ -1,5 +1,5 @@
 from app.models.categoria import Categoria
-
+from app.core.idioma import Idioma
 
 class Categoria_Controller:
     def __init__(self, dao, view):
@@ -19,7 +19,7 @@ class Categoria_Controller:
             )
             self.dao.save(categoria)
             self.get_all()
-            self.view.exibir_mensagem("Categoria cadastrada com sucesso!")
+            self.view.exibir_mensagem((Idioma.t("categoria.cadastrada")))
         except ValueError as e:
             self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
@@ -43,19 +43,19 @@ class Categoria_Controller:
     def update(self):
         try:
             if self.categoria_selecionada is None:
-                self.view.exibir_mensagem("Selecione uma categoria na lista.", False)
+                self.view.exibir_mensagem((Idioma.t("categoria.selecione_categoria", False)))
                 return
             nome = self.view.ler_dados_categoria()
             self.categoria_selecionada.atualizar_dados(nome)
             self.dao.update(self.categoria_selecionada)
             self.get_all()
-            self.view.exibir_mensagem("Categoria atualizada com sucesso!")
+            self.view.exibir_mensagem((Idioma.t("categoria.atualizada")))
         except ValueError as e:
             self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
     def delete(self):
         if self.categoria_selecionada is None:
-            self.view.exibir_mensagem("Selecione uma categoria na lista.", False)
+            self.view.exibir_mensagem((Idioma.t("categoria.selecione_lista", False)))
             return
         if not self.view.confirmar_exclusao():
             return
@@ -65,8 +65,8 @@ class Categoria_Controller:
                 self.categoria_selecionada = None
                 self.view.limpar_campos()
                 self.get_all()
-                self.view.exibir_mensagem("Categoria excluída com sucesso!")
+                self.view.exibir_mensagem((Idioma.t("categoria.excluida")))
             else:
-                self.view.exibir_mensagem("Categoria não encontrada.", False)
+                self.view.exibir_mensagem((Idioma.t("categoria.nao_encontrada", False)))
         except Exception as e:
-            self.view.exibir_mensagem("Problemas ao excluir categoria", False)
+            self.view.exibir_mensagem((Idioma.t("categoria.problema_excluir", False)))
